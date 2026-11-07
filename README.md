@@ -77,7 +77,7 @@ Other scripts: `bun run check` (lint and typecheck), `bun run contracts:build`, 
 
 ### Environment variables
 
-Create a `.env` file in the project root. None of these are secrets.
+Copy `.env.example` to `.env` and fill it in. None of these are secrets. Production builds (for example on Vercel) read the committed `.env.production`, so deploying needs no extra setup. If you deploy your own pool, update both files.
 
 - `VITE_ARC_POOL_ADDRESS`: address of the deployed ArcPool contract on Arc Testnet.
 - `VITE_ARC_POOL_DEPLOY_BLOCK`: block the contract was deployed in, where history reading starts.
