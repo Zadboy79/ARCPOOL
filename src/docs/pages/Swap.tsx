@@ -42,6 +42,24 @@ export function Swap() {
         in the route details.
       </p>
 
+      <H3>Routing when one pool is not enough</H3>
+      <p>
+        If no single pool can fill an order, the page looks for a longer route before giving up. It does this only
+        after the direct quote has failed.
+      </p>
+      <Table
+        head={['Situation', 'What the router does']}
+        rows={[
+          ['No direct pool for the pair, for example EURC to cirBTC', 'Goes through USDC: EURC to USDC, then USDC to cirBTC. Two swaps.'],
+          ['The order is too big for one pool, for example 30 USDC to cirBTC', 'Cuts the amount into 2 to 6 equal swaps, using the fewest that a pool will fill.'],
+        ]}
+      />
+      <p>
+        Every swap is a separate transaction that you confirm in your wallet. They run one after another, and the review
+        panel shows the number of confirmations, the estimated total and the minimum total. If a later swap fails, the
+        earlier ones stay completed. For the two-step route the second swap uses what the first one actually paid out.
+      </p>
+
       <H2>Price check</H2>
       <p>
         For every market quote the page also asks for the quote in the opposite direction, for exactly the amount you
@@ -57,7 +75,7 @@ export function Swap() {
       />
       <Callout tone="warn" title="Testnet pools are shallow and can be mispriced">
         When this feature was added, swapping USDC to EURC and straight back on the testnet pool returned about 68% more
-        than was put in, and large amounts and some pairs (for example EURC to cirBTC) had no route at all. Treat testnet rates as test
+        than was put in, and the cirBTC pool only filled buying orders of roughly 0.5 to 10 USDC per swap. Treat testnet rates as test
         data, never as a market price. When no route exists the page says so instead of guessing.
       </Callout>
 

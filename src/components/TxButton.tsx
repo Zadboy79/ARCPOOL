@@ -11,6 +11,8 @@ interface TxButtonProps {
   isSwitching: boolean
   onSwitch: () => void | Promise<void>
   disabled?: boolean
+  /** Text shown while a multi-step swap is running. */
+  busyLabel?: string
 }
 
 export function TxButton({
@@ -22,6 +24,7 @@ export function TxButton({
   isSwitching,
   onSwitch,
   disabled,
+  busyLabel,
 }: TxButtonProps) {
   if (!isConnected) {
     return (
@@ -53,7 +56,7 @@ export function TxButton({
         </>
       ) : phase === 'processing' ? (
         <>
-          <Loader2 className="size-4 animate-spin" /> Swapping...
+          <Loader2 className="size-4 animate-spin" /> {busyLabel ?? 'Swapping...'}
         </>
       ) : phase === 'confirming' ? (
         <>

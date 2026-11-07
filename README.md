@@ -8,7 +8,7 @@ Built with [Arc Studio](https://studio.arc.io)
 
 - Stake USDC and receive rUSDC
 - Withdraw rUSDC for USDC instantly, with no lockup, and see your withdrawal history
-- Swap USDC, EURC and cirBTC through the liquidity available on Arc, with live quotes, route details and slippage control
+- Swap USDC, EURC and cirBTC through the liquidity available on Arc, with live quotes, route details and slippage control. When one pool cannot fill an order, the router goes through USDC or splits the order into several swaps
 - Swap USDC and rUSDC at the pool rate
 - Earn page with the pool's live reward rate and size
 - Rewards page with your estimated earnings, a way to add USDC rewards that stream to stakers over 24 hours, and the history of rewards added

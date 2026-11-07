@@ -7,9 +7,11 @@ import { CHAIN_ID, USDC_DECIMALS } from '@/lib/pool'
 import { formatFixed } from '@/lib/format'
 import { routeKind, tokenBySymbol, type SwapSymbol } from '@/lib/tokens'
 import { useConvert } from '@/hooks/useConvert'
-import { quoteErrorText, useMarketExecute, useMarketQuote, useRoundTripCheck } from '@/hooks/useMarketSwap'
+import { quoteErrorText, useFallbackPlan, useMarketExecute, useMarketQuote, useRoundTripCheck } from '@/hooks/useMarketSwap'
+import { isNoRouteError } from '@/lib/swapPlan'
 import { useTokenBalances } from '@/hooks/useTokenBalances'
 import { PageTitle } from '@/components/PageTitle'
+import { PlanDetails } from '@/components/PlanDetails'
 import { PriceCheck } from '@/components/PriceCheck'
 import { RouteDetails } from '@/components/RouteDetails'
 import { TokenSelect } from '@/components/TokenSelect'
@@ -69,6 +71,10 @@ export function SwapPage({ data, refetch }: PageProps) {
     slippageBps,
     enabled: kind === 'market' && hasMarketAmount && marketProblem === null,
   })
+  // Router fallback: only when no single pool can fill the order.
+  const directFailed =
+    kind === 'market' && hasMarketAmount && marketProblem === null && !quote.isFetching && isNoRouteError(quote.error)
+  const fallback = useFallbackPlan({ from, to, amountIn: quote.reviewedAmount, slippageBps, enabled: directFailed })
   const roundTrip = useRoundTripCheck({ from, to, estimate: quote.estimate, slippageBps })
   const market = useMarketExecute(() => {
     setInput('')
@@ -124,8 +130,27 @@ export function SwapPage({ data, refetch }: PageProps) {
   } else {
     problem = marketProblem
     if (quote.estimate) output = quote.estimate.estimatedOutput.amount
+    else if (fallback.plan) output = fallback.plan.totalOut
     if (hasMarketAmount && marketProblem === null) {
-      if (flow.isConnected && quote.error) {
+      if (flow.isConnected && directFailed) {
+        const plan = fallback.plan
+        if (plan) {
+          const swaps = plan.kind === 'via' ? 2 : plan.parts
+          ctaLabel = `Swap ${fromSym} for ${toSym} in ${swaps} steps`
+          canSubmit = true
+          onAction = async () => {
+            await market.executePlan(plan, from, to, slippageBps)
+          }
+        } else if (fallback.error) {
+          problem =
+            fromSym === 'cirBTC' || toSym === 'cirBTC'
+              ? 'No route, even by splitting or going through USDC. cirBTC liquidity on testnet is thin: buying worked for roughly 0.5 to 10 USDC per swap when checked.'
+              : quoteErrorText(quote.error)
+          ctaLabel = 'No route available'
+        } else {
+          ctaLabel = 'Searching more routes...'
+        }
+      } else if (flow.isConnected && quote.error) {
         problem = quoteErrorText(quote.error)
         ctaLabel = 'No route available'
       } else if (quote.isFetching || !quote.estimate) {
@@ -148,7 +173,7 @@ export function SwapPage({ data, refetch }: PageProps) {
         : `Balance: ${formatFixed(fromBalance, from.decimals, from.decimals === 8 ? 6 : 4)} ${fromSym}`
 
   const lastHash = kind === 'market' ? market.lastHash : flow.lastHash
-  const provider = quote.estimate?.route?.provider
+  const provider = quote.estimate?.route?.provider ?? (fallback.plan?.kind === 'split' ? fallback.plan.estimate.route?.provider : fallback.plan?.legs[0].route?.provider)
 
   return (
     <div className="page-col">
@@ -254,7 +279,7 @@ export function SwapPage({ data, refetch }: PageProps) {
                   className="w-full bg-transparent text-3xl font-bold tabular-nums outline-none placeholder:text-[var(--muted)]"
                   style={{ color: 'var(--text)' }}
                 />
-                {kind === 'market' && quote.isFetching ? (
+                {kind === 'market' && (quote.isFetching || fallback.isFetching) ? (
                   <Loader2 className="absolute right-0 top-1/2 size-4 -translate-y-1/2 animate-spin" style={{ color: 'var(--muted)' }} />
                 ) : null}
               </div>
@@ -286,6 +311,9 @@ export function SwapPage({ data, refetch }: PageProps) {
             />
           </>
         ) : null}
+        {kind === 'market' && !quote.estimate && fallback.plan ? (
+          <PlanDetails plan={fallback.plan} from={from} to={to} slippageBps={slippageBps} />
+        ) : null}
 
         <div className="mt-3">
           <TxButton
@@ -297,6 +325,7 @@ export function SwapPage({ data, refetch }: PageProps) {
             isSwitching={flow.isSwitching}
             onSwitch={flow.switchToArc}
             disabled={!canSubmit}
+            busyLabel={market.progress}
           />
         </div>
 
