@@ -1,0 +1,22 @@
+# dependencies and build output
+node_modules/
+dist/
+
+# secrets and local config: never commit
+.env
+.env.*
+!.env.example
+.circle/
+recovery_file*
+
+# logs captured by the preview
+traces.jsonl
+console.jsonl
+*.log
+
+# Foundry build output and caches
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+.DS_Store
