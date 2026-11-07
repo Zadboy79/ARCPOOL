@@ -45,6 +45,7 @@ export const poolAbi = parseAbi([
   'function previewRedeem(uint256) view returns (uint256)',
   'function deposit(uint256 assets, address receiver) returns (uint256)',
   'function redeem(uint256 shares, address receiver, address owner) returns (uint256)',
+  'function withdraw(uint256 assets, address receiver, address owner) returns (uint256)',
   'function addRewards(uint256 amount)',
   'function idleAssets() view returns (uint256)',
   'function deployed() view returns (uint256)',

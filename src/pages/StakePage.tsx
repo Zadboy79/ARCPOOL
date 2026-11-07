@@ -9,6 +9,7 @@ import { AmountField } from '@/components/AmountField'
 import { CubeArt } from '@/components/CubeArt'
 import { Faq } from '@/components/Faq'
 import { PageTitle } from '@/components/PageTitle'
+import { PositionCard } from '@/components/PositionCard'
 import { StatsPanel } from '@/components/StatsPanel'
 import { UpdatePoolBanner } from '@/components/UpdatePoolBanner'
 import { StrategyPanel } from '@/components/StrategyPanel'
@@ -107,6 +108,9 @@ export function StakePage({ data, isLoading, refetch }: PageProps) {
         ) : null}
       </section>
 
+      <div className="mt-6">
+        <PositionCard data={data} refetch={refetch} hideWhenDisconnected />
+      </div>
       <UpdatePoolBanner data={data} refetch={refetch} />
       <StatsPanel data={data} isLoading={isLoading} nowSeconds={now} />
       <StrategyPanel data={data} refetch={refetch} />

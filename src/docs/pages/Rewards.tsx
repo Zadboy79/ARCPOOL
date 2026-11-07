@@ -8,16 +8,38 @@ export function Rewards() {
         everything that has been added.
       </Lead>
 
-      <H2>Your rewards</H2>
+      <H2>Check your stake</H2>
+      <p>
+        Connect your wallet and open the <strong>Stake</strong> page or the <strong>Rewards</strong> page. The
+        &quot;Your position&quot; card shows everything about your stake in one place.
+      </p>
       <Table
         head={['Row', 'Meaning']}
         rows={[
           ['Staked value', 'What your rUSDC would redeem for right now, at the exit price.'],
           ['rUSDC balance', 'The rUSDC in your wallet.'],
-          ['Net deposited', 'USDC you put in minus USDC you took out through this pool.'],
-          ['Estimated rewards earned', 'Staked value + withdrawn - deposited.'],
+          ['Original stake', 'USDC you put in minus USDC you took out through this pool.'],
+          ['Rewards earned', 'Staked value + withdrawn - deposited. This includes rewards you already took out.'],
+          ['Ready to claim', 'Staked value minus your original stake: the reward still inside your position.'],
         ]}
       />
+
+      <H2>Claim rewards</H2>
+      <p>
+        There is nothing you have to claim. Rewards are not paid out to your wallet; they raise the USDC value of your
+        rUSDC, and they keep earning while you leave them in. When you want the USDC, you have two choices.
+      </p>
+      <Table
+        head={['Button', 'What happens']}
+        rows={[
+          ['Claim rewards (Your position card)', 'Withdraws only the earned USDC. Your original stake stays in the pool and keeps earning.'],
+          ['Withdrawals page', 'Turns rUSDC back into USDC, as much as you choose, including all of it.'],
+        ]}
+      />
+      <p>
+        Only rewards that have already vested can be claimed. Rewards still streaming in are not part of your exit value
+        yet.
+      </p>
       <Callout title="Why it is an estimate">
         The figures come from the pool&apos;s <code>Deposit</code> and <code>Withdraw</code> events for your wallet.
         rUSDC you received from, or sent to, another wallet is not counted, so the result is only accurate if all your
