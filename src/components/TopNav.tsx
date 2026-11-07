@@ -63,7 +63,7 @@ export function TopNav() {
     <header className="relative z-40 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
       <div className="flex items-center gap-4 lg:gap-8">
         <Logo />
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
           <div ref={stakeRef} className="relative">
             <button
               type="button"
@@ -150,7 +150,7 @@ export function TopNav() {
           onClick={() => setMobileOpen((open) => !open)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
-          className="flex size-11 items-center justify-center rounded-xl md:hidden"
+          className="flex size-11 items-center justify-center rounded-xl lg:hidden"
           style={{ background: 'var(--nav-item)', color: 'var(--text)', border: '1px solid var(--border)' }}
         >
           {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -159,7 +159,7 @@ export function TopNav() {
 
       {mobileOpen ? (
         <nav
-          className="card absolute inset-x-4 top-full mt-1 rounded-2xl p-2 md:hidden"
+          className="card absolute inset-x-4 top-full mt-1 rounded-2xl p-2 lg:hidden"
           aria-label="Mobile"
         >
           {[...STAKE_ITEMS, { to: '/earn', label: 'Earn', icon: LineChart }, { to: '/swap', label: 'Swap', icon: RefreshCw }, { to: '/docs', label: 'Docs', icon: BookOpen }].map(

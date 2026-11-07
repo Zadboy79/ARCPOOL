@@ -19,7 +19,7 @@ export function useTokenBalances() {
       functionName: 'balanceOf' as const,
       args: [user] as const,
     })),
-    query: { enabled: address !== undefined, refetchInterval: 8_000 },
+    query: { enabled: address !== undefined, refetchInterval: 15_000 },
   })
 
   const balances: Balances = useMemo(() => {

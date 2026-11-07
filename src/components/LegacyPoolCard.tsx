@@ -22,7 +22,7 @@ export function LegacyPoolCard({ onDone }: { onDone: () => void }) {
     chainId: CHAIN_ID,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
-    query: { enabled: LEGACY_POOL_ADDRESS !== undefined && address !== undefined, refetchInterval: 10_000 },
+    query: { enabled: LEGACY_POOL_ADDRESS !== undefined && address !== undefined, refetchInterval: 30_000 },
   })
   const balance = shares.data
   const value = useReadContract({

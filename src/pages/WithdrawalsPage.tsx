@@ -15,7 +15,7 @@ import type { PageProps } from './types'
 export function WithdrawalsPage({ data, refetch }: PageProps) {
   const { address } = useAccount()
   const unstake = useConvert('unstake', data, refetch)
-  const events = usePoolEvents()
+  const events = usePoolEvents({ enabled: address !== undefined })
   const { flow } = unstake
 
   const rows: HistoryRow[] = useMemo(() => {

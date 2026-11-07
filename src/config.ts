@@ -16,7 +16,8 @@ export const config = createConfig({
   chains: [arcTestnet, mainnet], // mainnet needed for ENS resolution
   connectors: [injected()],
   transports: {
-    [arcTestnet.id]: http(),
-    [mainnet.id]: http(), // ENS resolution uses mainnet
+    // Batch concurrent reads into one request and retry gently: the public RPC rate limits bursts.
+    [arcTestnet.id]: http(undefined, { batch: { wait: 30 }, retryCount: 2, retryDelay: 1_500 }),
+    [mainnet.id]: http(undefined, { retryCount: 1 }), // ENS resolution uses mainnet
   },
 })

@@ -183,10 +183,11 @@ export function DocsLayout({ path, children }: { path: string; children: ReactNo
           <div className="flex items-center gap-2">
             <Link
               to="/"
-              className="flex min-h-10 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-sm font-bold text-white"
+              aria-label="Launch app"
+              className="flex min-h-10 items-center gap-2 whitespace-nowrap rounded-xl px-3 text-sm font-bold text-white sm:px-4"
               style={{ background: 'var(--primary)' }}
             >
-              <BookOpen className="size-4" /> Launch app
+              <BookOpen className="size-4" /> <span className="hidden sm:inline">Launch app</span>
             </Link>
             <button
               type="button"

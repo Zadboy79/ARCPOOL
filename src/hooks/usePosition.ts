@@ -10,7 +10,7 @@ import type { PoolData } from '@/hooks/usePoolData'
  */
 export function usePosition(data: PoolData) {
   const { address } = useAccount()
-  const events = usePoolEvents()
+  const events = usePoolEvents({ enabled: address !== undefined })
   const shares = data.shareBalance ?? 0n
 
   const value = useReadContract({
@@ -19,7 +19,7 @@ export function usePosition(data: PoolData) {
     chainId: CHAIN_ID,
     functionName: 'previewRedeem',
     args: [shares],
-    query: { enabled: shares > 0n, refetchInterval: 6_000 },
+    query: { enabled: shares > 0n, refetchInterval: 15_000 },
   })
   const stakedValue = shares > 0n ? value.data : 0n
 

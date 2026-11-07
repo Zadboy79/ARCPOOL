@@ -58,7 +58,7 @@ export function usePoolData() {
       { ...pool, functionName: 'bufferBps' },
       { ...pool, functionName: 'vaultsLength' },
     ],
-    query: { refetchInterval: 6_000 },
+    query: { refetchInterval: 15_000 },
   })
 
   const data: PoolData = useMemo(() => {

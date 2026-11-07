@@ -57,7 +57,7 @@ export function useVaults(count: number | undefined) {
       { ...pool, functionName: 'vaultAt' as const, args: [BigInt(i)] as const },
       { ...pool, functionName: 'vaultAssets' as const, args: [BigInt(i)] as const },
     ]),
-    query: { enabled: indexes.length > 0, refetchInterval: 8_000 },
+    query: { enabled: indexes.length > 0, refetchInterval: 20_000 },
   })
   const meta = useVaultMeta()
 
